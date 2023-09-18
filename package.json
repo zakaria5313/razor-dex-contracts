@@ -1,0 +1,11 @@
+{
+  "name": "venas_contracts",
+  "version": "0.0.0",
+  "description": "The node package sidecar for your Movement project, venas_contracts.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
