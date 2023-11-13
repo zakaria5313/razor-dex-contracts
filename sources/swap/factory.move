@@ -1,5 +1,5 @@
 /// Uniswap v2 like token swap program
-module venas::factory {
+module razor::factory {
     use std::signer;
     use std::option;
     use std::string;
@@ -12,15 +12,15 @@ module venas::factory {
     use aptos_framework::resource_account;
     use aptos_framework::code;
 
-    use venas::math;
-    use venas::swap_utils;
-    use venas::u256;
+    use razor::math;
+    use razor::swap_utils;
+    use razor::u256;
 
-    friend venas::router;
+    friend razor::router;
 
     const ZERO_ACCOUNT: address = @zero;
     const DEFAULT_ADMIN: address = @default_admin;
-    const RESOURCE_ACCOUNT: address = @venas;
+    const RESOURCE_ACCOUNT: address = @razor;
     const DEV: address = @dev;
     const MINIMUM_LIQUIDITY: u128 = 1000;
     const MAX_COIN_NAME_LENGTH: u64 = 32;

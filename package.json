@@ -1,7 +1,7 @@
 {
-  "name": "venas_contracts",
+  "name": "razor_contracts",
   "version": "0.0.0",
-  "description": "The node package sidecar for your Movement project, venas_contracts.",
+  "description": "The node package sidecar for your Movement project, razor_contracts.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

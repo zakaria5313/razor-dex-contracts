@@ -1,16 +1,16 @@
 #[test_only]
-module venas::swap_test {
+module razor::swap_test {
     use std::signer;
     use test_coin::test_coins::{Self, TestVENAS, TestBUSD, TestUSDC, TestMVMT, TestAPT};
     use aptos_framework::account;
     use aptos_framework::coin;
     use aptos_framework::genesis;
     use aptos_framework::resource_account;
-    use venas::factory::{Self, LPToken, initialize};
-    use venas::router;
-    use venas::math;
+    use razor::factory::{Self, LPToken, initialize};
+    use razor::router;
+    use razor::math;
     use aptos_std::math64::pow;
-    use venas::swap_utils;
+    use razor::swap_utils;
 
     const MAX_U64: u64 = 18446744073709551615;
     const MINIMUM_LIQUIDITY: u128 = 1000;
@@ -29,7 +29,7 @@ module venas::swap_test {
         factory::set_fee_to(admin, signer::address_of(treasury))
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_add_liquidity(
         dev: &signer,
         admin: &signer,
@@ -80,7 +80,7 @@ module venas::swap_test {
         assert!(resource_account_lp_balance == (resource_account_suppose_lp_balance as u64), 93);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_add_liquidity_with_less_x_ratio(
         dev: &signer,
         admin: &signer,
@@ -131,7 +131,7 @@ module venas::swap_test {
         assert!(resource_account_lp_balance == (resource_account_suppose_lp_balance as u64), 96);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     #[expected_failure(abort_code = 3)]
     fun test_add_liquidity_with_less_x_ratio_and_less_than_y_min(
         dev: &signer,
@@ -162,7 +162,7 @@ module venas::swap_test {
         router::add_liquidity<TestVENAS, TestBUSD>(bob, bob_add_liquidity_x, bob_add_liquidity_y, 0, 4 * pow(10, 8));
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_add_liquidity_with_less_y_ratio(
         dev: &signer,
         admin: &signer,
@@ -214,7 +214,7 @@ module venas::swap_test {
         assert!(resource_account_lp_balance == (resource_account_suppose_lp_balance as u64), 96);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     #[expected_failure(abort_code = 2)]
     fun test_add_liquidity_with_less_y_ratio_and_less_than_x_min(
         dev: &signer,
@@ -245,7 +245,7 @@ module venas::swap_test {
         router::add_liquidity<TestVENAS, TestBUSD>(bob, bob_add_liquidity_x, bob_add_liquidity_y, 5 * pow(10, 8), 0);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12341, alice = @0x12342)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12341, alice = @0x12342)]
     fun test_remove_liquidity(
         dev: &signer,
         admin: &signer,
@@ -333,7 +333,7 @@ module venas::swap_test {
         assert!(total_supply == MINIMUM_LIQUIDITY, 87);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, user1 = @0x12341, user2 = @0x12342, user3 = @0x12343, user4 = @0x12344)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, user1 = @0x12341, user2 = @0x12342, user3 = @0x12343, user4 = @0x12344)]
     fun test_remove_liquidity_with_more_user(
         dev: &signer,
         admin: &signer,
@@ -480,7 +480,7 @@ module venas::swap_test {
         assert!(total_supply == MINIMUM_LIQUIDITY, 79);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12341, alice = @0x12342)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12341, alice = @0x12342)]
     #[expected_failure(abort_code = 10)]
     fun test_remove_liquidity_imbalance(
         dev: &signer,
@@ -520,7 +520,7 @@ module venas::swap_test {
         router::remove_liquidity<TestVENAS, TestBUSD>(alice, alice_lp_balance, 0, 0);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_swap_exact_input(
         dev: &signer,
         admin: &signer,
@@ -602,7 +602,7 @@ module venas::swap_test {
         assert!(treasury_token_y_after_balance == (treasury_remove_liquidity_y as u64), 91);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_swap_exact_input_overflow(
         dev: &signer,
         admin: &signer,
@@ -631,7 +631,7 @@ module venas::swap_test {
         router::swap_exact_input<TestVENAS, TestBUSD>(alice, input_x, 0);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     #[expected_failure(abort_code = 65542)]
     fun test_swap_exact_input_with_not_enough_liquidity(
         dev: &signer,
@@ -662,7 +662,7 @@ module venas::swap_test {
         router::swap_exact_input<TestVENAS, TestBUSD>(alice, input_x, 0);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     #[expected_failure(abort_code = 0)]
     fun test_swap_exact_input_under_min_output(
         dev: &signer,
@@ -693,7 +693,7 @@ module venas::swap_test {
         router::swap_exact_input<TestVENAS, TestBUSD>(alice, input_x, ((output_y + 1) as u64));
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_swap_exact_output(
         dev: &signer,
         admin: &signer,
@@ -776,7 +776,7 @@ module venas::swap_test {
         assert!(treasury_token_y_after_balance == (treasury_remove_liquidity_y as u64), 91);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     #[expected_failure]
     fun test_swap_exact_output_with_not_enough_liquidity(
         dev: &signer,
@@ -808,7 +808,7 @@ module venas::swap_test {
         router::swap_exact_output<TestVENAS, TestBUSD>(alice, output_y, input_x_max);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     #[expected_failure(abort_code = 1)]
     fun test_swap_exact_output_excceed_max_input(
         dev: &signer,
@@ -840,7 +840,7 @@ module venas::swap_test {
         router::swap_exact_output<TestVENAS, TestBUSD>(alice, output_y, ((input_x - 1) as u64));
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_swap_x_to_exact_y_direct_external(
         dev: &signer,
         admin: &signer,
@@ -937,7 +937,7 @@ module venas::swap_test {
         assert!(treasury_token_y_after_balance == (treasury_remove_liquidity_y as u64), 91);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_swap_x_to_exact_y_direct_external_with_more_x_in(
         dev: &signer,
         admin: &signer,
@@ -1033,7 +1033,7 @@ module venas::swap_test {
         assert!(treasury_token_y_after_balance == (treasury_remove_liquidity_y as u64), 91);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     #[expected_failure(abort_code = 2)]
     fun test_swap_x_to_exact_y_direct_external_with_less_x_in(
         dev: &signer,
@@ -1077,7 +1077,7 @@ module venas::swap_test {
         coin::deposit<TestBUSD>(alice_addr, y_out);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_get_amount_in(
         dev: &signer,
         admin: &signer,
@@ -1117,7 +1117,7 @@ module venas::swap_test {
         assert!(y_in_amount == (input_y as u64), 101);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_swap_exact_input_doublehop(
         dev: &signer,
         admin: &signer,
@@ -1247,7 +1247,7 @@ module venas::swap_test {
         assert!(treasury_token_yz_z_after_balance == (treasury_remove_liquidity_yz_z as u64), 91);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun swap_exact_output_doublehop(
         dev: &signer,
         admin: &signer,
@@ -1377,7 +1377,7 @@ module venas::swap_test {
         assert!(treasury_token_yz_z_after_balance == (treasury_remove_liquidity_yz_z as u64), 91);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_swap_exact_input_triplehop(
         dev: &signer,
         admin: &signer,
@@ -1555,7 +1555,7 @@ module venas::swap_test {
         assert!(treasury_token_za_a_after_balance == (treasury_remove_liquidity_za_a as u64), 91);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_swap_exact_output_triplehop(
         dev: &signer,
         admin: &signer,
@@ -1733,7 +1733,7 @@ module venas::swap_test {
         assert!(treasury_token_za_a_after_balance == (treasury_remove_liquidity_za_a as u64), 91);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, user1 = @0x12341, user2 = @0x12342, user3 = @0x12343, user4 = @0x12344, alice = @0x12345)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, user1 = @0x12341, user2 = @0x12342, user3 = @0x12343, user4 = @0x12344, alice = @0x12345)]
     #[expected_failure(abort_code = 21)]
     fun test_swap_exact_input_triplehop_with_multi_liquidity(
         dev: &signer,
@@ -1985,7 +1985,7 @@ module venas::swap_test {
         factory::withdraw_fee<TestVENAS, TestBUSD>(treasury);
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_swap_exact_input_quadruplehop(
         dev: &signer,
         admin: &signer,
@@ -2066,7 +2066,7 @@ module venas::swap_test {
 
     }
 
-    #[test(dev = @dev, admin = @default_admin, resource_account = @venas, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
+    #[test(dev = @dev, admin = @default_admin, resource_account = @razor, treasury = @0x23456, bob = @0x12345, alice = @0x12346)]
     fun test_swap_exact_output_quadruplehop(
         dev: &signer,
         admin: &signer,

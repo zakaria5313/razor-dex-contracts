@@ -1,5 +1,5 @@
 [package]
-name = "venas_contracts"
+name = "razor_contracts"
 version = "0.0.0"
 
 [dependencies]
@@ -8,7 +8,7 @@ AptosStdlib = {git = "https://github.com/aptos-labs/aptos-core.git", subdir = "a
 
 [addresses]
 std =  "0x1"
-venas = "e48cfcdf37a3d3579cad735042623a9b941b75f62b1d856e894a368f5e45bc15"
+razor = "e48cfcdf37a3d3579cad735042623a9b941b75f62b1d856e894a368f5e45bc15"
 dev = "cbbb7184810ec827cf96d8fb31eaf2409d56e801d1d47d5ba335fa2e086698c2"
 zero = "0000000000000000000000000000000000000000000000000000000000000000"
 default_admin = "cbbb7184810ec827cf96d8fb31eaf2409d56e801d1d47d5ba335fa2e086698c2"

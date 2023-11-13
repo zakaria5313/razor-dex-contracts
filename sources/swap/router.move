@@ -1,8 +1,8 @@
-module venas::router {
-    use venas::factory;
+module razor::router {
+    use razor::factory;
     use std::signer;
     use aptos_framework::coin;
-    use venas::swap_utils;
+    use razor::swap_utils;
 
     //
     // Errors.
