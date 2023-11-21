@@ -1,15 +1,15 @@
 [package]
-name = "razor_contracts"
+name = "razor_dex"
 version = "0.0.0"
 
 [dependencies]
-AptosFramework = {  git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-framework", rev = "main" }
-AptosStdlib = {git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-stdlib/", rev = "main"}
+AptosFramework = {git = "https://github.com/movemntdev/aptos-core.git", subdir = "aptos-move/framework/aptos-framework", rev = "testnet"}
+AptosStdlib = {git = "https://github.com/movemntdev/aptos-core.git", subdir = "aptos-move/framework/aptos-stdlib/", rev = "testnet"}
 
 [addresses]
 std =  "0x1"
-razor = "e48cfcdf37a3d3579cad735042623a9b941b75f62b1d856e894a368f5e45bc15"
-dev = "cbbb7184810ec827cf96d8fb31eaf2409d56e801d1d47d5ba335fa2e086698c2"
+razor = "8511115e91e7f6bbb50cd51ee5469666a2e06eb041bbcac2544ce6b8d6b02ba1"
+dev = "a60491f2e71c83ac63551c4e3f51c0933da0f926123175865c0741d03e1e1ea0"
 zero = "0000000000000000000000000000000000000000000000000000000000000000"
-default_admin = "cbbb7184810ec827cf96d8fb31eaf2409d56e801d1d47d5ba335fa2e086698c2"
+default_admin = "a60491f2e71c83ac63551c4e3f51c0933da0f926123175865c0741d03e1e1ea0"
 test_coin = "0x16"

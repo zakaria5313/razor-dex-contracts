@@ -1,7 +1,7 @@
 {
-  "name": "razor_contracts",
+  "name": "razor_dex",
   "version": "0.0.0",
-  "description": "The node package sidecar for your Movement project, razor_contracts.",
+  "description": "The node package sidecar for your Movement project, razor_dex.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
