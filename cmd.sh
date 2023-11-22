@@ -9,3 +9,4 @@ movement move compile --package-dir ./src/libs
 movement move compile --package-dir ./src/resource_account
 movement move compile --package-dir ./src/lp
 movement move compile --package-dir ./src/swap
+movement move compile --package-dir ./src/faucet

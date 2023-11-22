@@ -1,5 +1,5 @@
 module razor::RazorSwapPool {
-    use razor_resource::LPCoinV1::LPCoin;
+    use razor_resource::LPCoin::LPCoin;
     use razor::RazorPoolLibrary;
     use razor::LPResourceAccount;
 
