@@ -1,0 +1,15 @@
+[package]
+name = 'Swap'
+version = '1.0.0'
+[dependencies]
+AptosFramework = {git = "https://github.com/movemntdev/aptos-core.git", subdir = "aptos-move/framework/aptos-framework", rev = "testnet"}
+AptosStdlib = {git = "https://github.com/movemntdev/aptos-core.git", subdir = "aptos-move/framework/aptos-stdlib/", rev = "testnet"}
+LPCoin = { local= "../lp" }
+resource_account = { local= "../resource_account" }
+razor_libs = { local= "../libs" }
+
+
+[addresses]
+std = "0x1"
+razor = "0xa60491f2e71c83ac63551c4e3f51c0933da0f926123175865c0741d03e1e1ea0"
+razor_resource = "0x8511115e91e7f6bbb50cd51ee5469666a2e06eb041bbcac2544ce6b8d6b02ba1"
