@@ -1,21 +1,22 @@
 module razor::RazorSwapPool {
-    use razor_resource::LPCoin::LPCoin;
     use razor::RazorPoolLibrary;
-    use razor::LPResourceAccount;
+    use razor::u256;
+    use razor::uq64x64;
 
     use std::signer;
     use std::type_info::{Self, TypeInfo};
-    use std::string::utf8;
     use std::event;
     use std::vector;
+    use std::string;
 
     use aptos_framework::timestamp;
     use aptos_framework::coin::{Self, Coin, MintCapability, FreezeCapability, BurnCapability};
     use aptos_framework::account::{Self, SignerCapability};
-
-    use razor_libs::u256;
-    use razor_libs::uq64x64;
+    use aptos_framework::resource_account;
+    
     // use std::debug;    // For debug
+
+    struct LPCoin<phantom X, phantom Y> has key {}
 
     /// pool data
     struct LiquidityPool<phantom X, phantom Y> has key {
@@ -107,6 +108,8 @@ module razor::RazorSwapPool {
 
     const MINIMUM_LIQUIDITY: u64 = 1000;
     const MAX_U64: u64 = 18446744073709551615u64;
+    const DEV: address = @dev;
+    const MAX_COIN_NAME_LENGTH: u64 = 32;
 
     /// When contract error
     const ERR_INTERNAL_ERROR: u64 = 102;
@@ -143,15 +146,15 @@ module razor::RazorSwapPool {
     /// When contract is paused
     const ERR_PAUSABLE_ERROR: u64 = 120;
 
-    const DEPLOYER_ADDRESS: address = @razor;
-    const RESOURCE_ACCOUNT_ADDRESS: address = @razor_resource;
+    const DEPLOYER_ADDRESS: address = @dev;
+    const RESOURCE_ACCOUNT_ADDRESS: address = @razor;
 
     // initialize
     fun init_module(admin: &signer) {
         // init admin data
-        let signer_cap = LPResourceAccount::retrieve_signer_cap(admin);
-        let resource_account = &account::create_signer_with_capability(&signer_cap);
-        move_to(resource_account, AdminData {
+        let signer_cap = resource_account::retrieve_resource_account_cap(admin, DEV);
+        let resource_account = account::create_signer_with_capability(&signer_cap);
+        move_to(&resource_account, AdminData {
             signer_cap,
             dao_fee_to: DEPLOYER_ADDRESS,
             admin_address: DEPLOYER_ADDRESS,
@@ -161,7 +164,7 @@ module razor::RazorSwapPool {
             is_pause: false,    // default false
         });
         // init pair info
-        move_to(resource_account, PairInfo{
+        move_to(&resource_account, PairInfo {
             pair_list: vector::empty(),
         });
     }
@@ -672,8 +675,26 @@ module razor::RazorSwapPool {
         assert!(!exists<LiquidityPool<X, Y>>(RESOURCE_ACCOUNT_ADDRESS), ERR_PAIR_ALREADY_EXIST);
         assert_not_paused();
         let resource_account_signer = get_resource_account_signer();
+
+        let lp_name: string::String = string::utf8(b"Razor-");
+        let name_x = coin::symbol<X>();
+        let name_y = coin::symbol<Y>();
+        string::append(&mut lp_name, name_x);
+        string::append_utf8(&mut lp_name, b"-");
+        string::append(&mut lp_name, name_y);
+        string::append_utf8(&mut lp_name, b"-LP");
+        if (string::length(&lp_name) > MAX_COIN_NAME_LENGTH) {
+            lp_name = string::utf8(b"Razor DEX LPs");
+        };
+
         // create lp coin
-        let (lp_b, lp_f, lp_m) = coin::initialize<LPCoin<X, Y>>(&resource_account_signer, utf8(b"AnimeSwapLPCoin"), utf8(b"ANILPCoin"), 8, true);
+        let (lp_b, lp_f, lp_m) = coin::initialize<LPCoin<X, Y>>(
+            &resource_account_signer, 
+            lp_name, 
+            string::utf8(b"Razor-LP"), 
+            8, 
+            true
+        );
         // register coin
         RazorPoolLibrary::register_coin<LPCoin<X, Y>>(&resource_account_signer);
         // register LiquidityPool

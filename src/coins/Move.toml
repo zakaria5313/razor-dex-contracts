@@ -1,5 +1,5 @@
 [package]
-name = 'LPCoin'
+name = 'Coins'
 version = '1.0.0'
 
 [dependencies]
@@ -8,4 +8,4 @@ AptosStdlib = {git = "https://github.com/movemntdev/aptos-core.git", subdir = "a
 
 [addresses]
 std = "0x1"
-razor_resource = "0x8511115e91e7f6bbb50cd51ee5469666a2e06eb041bbcac2544ce6b8d6b02ba1"
+razor = "0xcf85ab29b66bbb7a0e955413a84e6bc7e2648dae0658f94cd5e667f484efa4a5"

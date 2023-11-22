@@ -1,5 +1,5 @@
 /// Implementation of FixedPoint u64 in Move language.
-module razor_libs::uq64x64 {
+module razor::uq64x64 {
     // Error codes.
 
     /// When divide by zero attempted.
