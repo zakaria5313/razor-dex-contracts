@@ -8,4 +8,4 @@ AptosStdlib = {git = "https://github.com/movemntdev/aptos-core.git", subdir = "a
 
 [addresses]
 std = "0x1"
-razor = "0xcf85ab29b66bbb7a0e955413a84e6bc7e2648dae0658f94cd5e667f484efa4a5"
+razor = "0xa60491f2e71c83ac63551c4e3f51c0933da0f926123175865c0741d03e1e1ea0"
