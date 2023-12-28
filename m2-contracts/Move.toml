@@ -9,3 +9,5 @@ Sui = { local = "./deps/sui-framework" }
 razor = "0x0"
 sui = "0x2"
 std = "0x1"
+
+deployer = "0xc66795296ef496be739f4963465da86a39d387f7eb95ff38ffde64030ddf4710"
