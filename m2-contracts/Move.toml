@@ -1,0 +1,11 @@
+[package]
+name = "m2-contracts"
+version = "0.0.1"
+
+[dependencies]
+Sui = { local = "./deps/sui-framework" }
+
+[addresses]
+razor = "0x0"
+sui = "0x2"
+std = "0x1"
