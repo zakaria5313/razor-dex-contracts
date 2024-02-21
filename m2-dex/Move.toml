@@ -10,4 +10,4 @@ razor = "0x0"
 sui = "0x2"
 std = "0x1"
 
-deployer = "0xc66795296ef496be739f4963465da86a39d387f7eb95ff38ffde64030ddf4710"
+deployer = "0x8ff0045977079db4863e169b3efb37f5f0cb8beb477128288b7ea66ecdf92c6d"
