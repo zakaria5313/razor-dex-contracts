@@ -7,6 +7,7 @@ Movement CLI
 ## How to use
 
 1. Initialize your movement account
+
 ```shell
 $ movement  init
 ```

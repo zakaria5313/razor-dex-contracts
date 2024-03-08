@@ -1,4 +1,6 @@
+
 module razor::RazorSwapPool {
+    // Importing necessary modules and libraries
     use razor::RazorPoolLibrary;
     use razor::u256;
     use razor::uq64x64;
@@ -14,11 +16,11 @@ module razor::RazorSwapPool {
     use aptos_framework::account::{Self, SignerCapability};
     use aptos_framework::resource_account;
     
-    // use std::debug;    // For debug
-
+    // Struct for Liquidity Pool Coin with phantom types X and Y
     struct LPCoin<phantom X, phantom Y> has key {}
 
-    /// pool data
+    // Struct for Liquidity Pool with phantom types X and Y
+    // Contains all necessary data for a liquidity pool
     struct LiquidityPool<phantom X, phantom Y> has key {
         coin_x_reserve: Coin<X>,
         coin_y_reserve: Coin<Y>,
@@ -32,7 +34,8 @@ module razor::RazorSwapPool {
         locked: bool,
     }
 
-    /// global config data
+    // Struct for Admin Data
+    // Contains all necessary data for admin configuration
     struct AdminData has key {
         signer_cap: SignerCapability,
         dao_fee_to: address,
@@ -43,17 +46,22 @@ module razor::RazorSwapPool {
         is_pause: bool, // pause swap
     }
 
+    // Struct for Pair Meta
+    // Contains type information for a pair of coins and their LP coin
     struct PairMeta has drop, store, copy {
         coin_x: TypeInfo,
         coin_y: TypeInfo,
         lp_coin: TypeInfo,
     }
 
-    /// pair list
+    // Struct for Pair Info
+    // Contains a list of all pairs
     struct PairInfo has key {
         pair_list: vector<PairMeta>,
     }
 
+    // Struct for Events with phantom types X and Y
+    // Contains all event handles for a pair
     struct Events<phantom X, phantom Y> has key {
         pair_created_event: event::EventHandle<PairCreatedEvent<X, Y>>,
         mint_event: event::EventHandle<MintEvent<X, Y>>,
@@ -63,22 +71,30 @@ module razor::RazorSwapPool {
         flash_swap_event: event::EventHandle<FlashSwapEvent<X, Y>>,
     }
 
+    // Struct for Pair Created Event with phantom types X and Y
+    // Contains meta information for a pair
     struct PairCreatedEvent<phantom X, phantom Y> has drop, store {
         meta: PairMeta,
     }
 
+    // Struct for Mint Event with phantom types X and Y
+    // Contains amount information for a mint event
     struct MintEvent<phantom X, phantom Y> has drop, store {
         amount_x: u64,
         amount_y: u64,
         liquidity: u64,
     }
 
+    // Struct for Burn Event with phantom types X and Y
+    // Contains amount information for a burn event
     struct BurnEvent<phantom X, phantom Y> has drop, store {
         amount_x: u64,
         amount_y: u64,
         liquidity: u64,
     }
 
+    // Struct for Swap Event with phantom types X and Y
+    // Contains amount information for a swap event
     struct SwapEvent<phantom X, phantom Y> has drop, store {
         amount_x_in: u64,
         amount_y_in: u64,
@@ -86,6 +102,8 @@ module razor::RazorSwapPool {
         amount_y_out: u64,
     }
 
+    // Struct for Sync Event with phantom types X and Y
+    // Contains reserve and price information for a sync event
     struct SyncEvent<phantom X, phantom Y> has drop, store {
         reserve_x: u64,
         reserve_y: u64,
@@ -93,6 +111,8 @@ module razor::RazorSwapPool {
         last_price_y_cumulative: u128,
     }
 
+    // Struct for Flash Swap Event with phantom types X and Y
+    // Contains loan and repay information for a flash swap event
     struct FlashSwapEvent<phantom X, phantom Y> has drop, store {
         loan_coin_x: u64,
         loan_coin_y: u64,
