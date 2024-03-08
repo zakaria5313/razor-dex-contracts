@@ -1,4 +1,8 @@
-# Compile all packages
-movement move compile --package-dir ./src/swap
-movement move compile --package-dir ./src/faucet
-movement move compile --package-dir ./src/coins
+# Compile all sui packages
+sui move build --path ./src/m2-coins
+sui move build --path ./src/m2-dex
+
+# Compile all aptos packages
+aptos move compile --package-dir ./src/m1-coins
+aptos move compile --package-dir ./src/m1-faucet
+aptos move compile --package-dir ./src/m1-dex

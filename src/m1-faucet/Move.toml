@@ -1,0 +1,11 @@
+[package]
+name = 'Faucet'
+version = '1.0.0'
+
+[dependencies]
+AptosFramework = {git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-framework", rev = "mainnet"}
+AptosStdlib = {git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-stdlib/", rev = "mainnet"}
+
+[addresses]
+std = "0x1"
+razor = "7ddd1fec4f995aca50f945298cdd51243cf71276cb912ba2c6f0fa12919acb5b"
