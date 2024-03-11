@@ -3,7 +3,7 @@ name = "m2-faucet"
 version = "0.0.1"
 
 [dependencies]
-Sui = { local = "./deps/sui-framework" }
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
 
 [addresses]
 razor = "0x0"

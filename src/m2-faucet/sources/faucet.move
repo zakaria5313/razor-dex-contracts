@@ -5,13 +5,10 @@ module razor::faucet {
     use sui::transfer;
     use sui::coin::{Self, Coin};
     use sui::object::{Self, UID};
-    use sui::balance::{Self, Supply, Balance};
+    use sui::balance::{Self, Balance};
     use sui::dynamic_object_field as ofield;
     use sui::tx_context::{Self, TxContext};
     use sui::event;
-    use sui::clock::{Self, Clock};
-    use sui::vec_map::{Self, VecMap};
-    use sui::borrow;
 
     // Errors.
 
@@ -21,14 +18,11 @@ module razor::faucet {
     /// When Faucet doesn't exists on account.
     const ERR_FAUCET_NOT_EXISTS: u64 = 101;
 
-    /// When user already got coins and currently restricted to request more funds.
-    const ERR_RESTRICTED: u64 = 102;
-
     /// When contract is paused
-    const ERR_PAUSABLE_ERROR: u64 = 103;
+    const ERR_PAUSABLE_ERROR: u64 = 102;
 
     /// When user is not admin
-    const ERR_FORBIDDEN: u64 = 104;
+    const ERR_FORBIDDEN: u64 = 103;
 
     struct AdminData has store, copy, drop {
         admin_address: address,
@@ -44,7 +38,6 @@ module razor::faucet {
         id: UID,
         admin_data: AdminData,
         faucet_info: FaucetInfo,
-        restricted_map: VecMap<address, Restricted>,
         per_request: u64,
         period: u64,
     }
@@ -55,11 +48,6 @@ module razor::faucet {
 
     struct FaucetInfo has store, copy, drop {
         faucet_list: vector<CoinMeta>,
-    }
-
-    struct Restricted<phantom Faucet> has store {
-        is_restricted: bool,
-        since: u64,
     }
 
     struct FaucetCreatedEvent<phantom CoinType> has drop, copy {
@@ -76,7 +64,6 @@ module razor::faucet {
             faucet_info: FaucetInfo {
                 faucet_list: vector::empty(),
             },
-            restricted_map: vec_map::empty();
             per_request: 10000000000,
             period: 86400,
         });
@@ -161,36 +148,14 @@ module razor::faucet {
     public fun request_internal<CoinType>(
         faucets: &Faucets,
         faucet: &mut Faucet<CoinType>,
-        clock: &Clock,
         ctx: &mut TxContext
     ): Coin<CoinType> {
         assert!(check_faucet_exist<CoinType>(faucets), ERR_FAUCET_NOT_EXISTS);
 
         let coins = balance::split(&mut faucet.deposit, faucets.per_request);
+        // return_remaining_balance<CoinType>(faucet.deposit, ctx);
 
-        let now = clock::timestamp_ms(clock);
-
-        let msg_sender = tx_context::sender(ctx);
-        let restricted = vec_map::get(&faucets.restricted_map, msg_sender);
-
-        if (!restricted.is_restricted) {
-            assert!(restricted.since + faucets.period <= now, ERR_RESTRICTED);
-            restricted.since = now;
-        } else {
-            vec_map::
-        }
-
-        /* if (exists<Restricted<CoinType>>(account_addr)) {
-            let restricted = borrow_global_mut<Restricted<CoinType>>(account_addr);
-            assert!(restricted.since + faucet.period <= now, ERR_RESTRICTED);
-            restricted.since = now;
-        } else {
-            move_to(account, Restricted<CoinType> {
-                since: now,
-            });
-        };
-
-        coins */
+        coin::from_balance(coins, ctx)
     }
 
     // Scripts.
@@ -199,42 +164,40 @@ module razor::faucet {
     /// * `account` - account which creates
     /// * `per_request` - how much funds should be distributed per user request.
     /// * `period` - interval allowed between requests for specific user.
-    /* public entry fun create_faucet<CoinType>(account: &signer, amount_to_deposit: u64, per_request: u64, period: u64) {
-        let coins = coin::withdraw<CoinType>(account, amount_to_deposit);
-
-        create_faucet_internal(account, coins, per_request, period);
+    public entry fun create_faucet<CoinType>(faucets: &mut Faucets, ctx: &mut TxContext) {
+        create_faucet_internal<CoinType>(faucets, ctx);
     }
 
     /// Changes faucet settings on `account`.
-    public entry fun change_settings<CoinType>(account: &signer, per_request: u64, period: u64) acquires Faucet {
-        change_settings_internal<CoinType>(account, per_request, period);
+    public entry fun change_settings<CoinType>(
+        faucets: &mut Faucets,
+        per_request: u64,
+        period: u64,
+        ctx: &mut TxContext,
+    ) {
+        change_settings_internal<CoinType>(faucets, per_request, period, ctx);
     }
 
     /// Deposits coins `CoinType` to faucet on `faucet` address, withdrawing funds from user balance.
-    public entry fun deposit<CoinType>(account: &signer, faucet_addr: address, amount: u64) acquires Faucet {
-        let coins = coin::withdraw<CoinType>(account, amount);
-
-        deposit_internal<CoinType>(faucet_addr, coins);
+    public entry fun deposit<CoinType>(
+        deposit: Coin<CoinType>,
+        faucets: &mut Faucets,
+        faucet: &mut Faucet<CoinType>,
+        amount: u64,
+        ctx: &mut TxContext,
+    ) {
+        deposit_internal<CoinType>(deposit, faucets, faucet, amount, ctx);
     }
 
     /// Deposits coins `CoinType` from faucet on user's account.
     /// `faucet` - address of faucet to request funds.
-    public entry fun request<CoinType>(account: &signer, faucet_addr: address) acquires Faucet, Restricted {
-        let account_addr = signer::address_of(account);
-
-        if (!coin::is_account_registered<CoinType>(account_addr)) {
-            coin::register<CoinType>(account);
-        };
-
-        let coins = request_internal<CoinType>(account, faucet_addr);
-
-        coin::deposit(account_addr, coins);
-    } */
-
-    fun assert_paused(
+    public entry fun request<CoinType>(
         faucets: &Faucets,
+        faucet: &mut Faucet<CoinType>,
+        ctx: &mut TxContext
     ) {
-        assert!(faucets.admin_data.is_pause, ERR_PAUSABLE_ERROR);
+        let coins = request_internal<CoinType>(faucets, faucet, ctx);
+        transfer::public_transfer(coins, tx_context::sender(ctx));
     }
 
     fun assert_not_paused(
@@ -243,7 +206,6 @@ module razor::faucet {
         assert!(!faucets.admin_data.is_pause, ERR_PAUSABLE_ERROR);
     }
 
-    /// return remaining coin.
     #[lint_allow(self_transfer)]
     public fun return_remaining_coin<CoinType>(
         coin: Coin<CoinType>,
@@ -253,6 +215,18 @@ module razor::faucet {
             coin::destroy_zero(coin);
         } else {
             transfer::public_transfer(coin, tx_context::sender(ctx));
+        };
+    }
+
+    #[lint_allow(self_transfer)]
+    public fun return_remaining_balance<CoinType>(
+        balance: Balance<CoinType>,
+        ctx: &mut TxContext,
+    ) {
+        if (balance::value(&balance) == 0) {
+            balance::destroy_zero(balance);
+        } else {
+            transfer::public_transfer(coin::from_balance(balance, ctx), tx_context::sender(ctx));
         };
     }
 }
