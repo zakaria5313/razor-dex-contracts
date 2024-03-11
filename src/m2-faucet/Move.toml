@@ -1,0 +1,14 @@
+[package]
+name = "m2-faucet"
+version = "0.0.1"
+
+[dependencies]
+Sui = { local = "./deps/sui-framework" }
+
+[addresses]
+razor = "0x0"
+sui = "0x2"
+std = "0x1"
+
+deployer = "0xc66795296ef496be739f4963465da86a39d387f7eb95ff38ffde64030ddf4710"
+
