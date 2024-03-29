@@ -8,5 +8,5 @@ AptosStdlib = {git = "https://github.com/aptos-labs/aptos-core.git", subdir = "a
 
 [addresses]
 std = "0x1"
-dev = "7ddd1fec4f995aca50f945298cdd51243cf71276cb912ba2c6f0fa12919acb5b"
-razor = "dd4e822acb5533417e4cb3c6206fd56fa81fc974298e7fcfba64388b8ee69e40"
+dev = "cab9a7545a4f4a46308e2ac914a5ce2dcf63482713e683b4bc5fc4b514a790f2"
+razor = "65c7939df25c4986b38a6af99602bf17daa1a2d7b53e6847ed25c04f74f54607"

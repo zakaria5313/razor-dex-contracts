@@ -11,6 +11,7 @@ module razor::Coins {
     struct ETH {}
     struct SOL {}
     struct BNB {}
+    struct RAZOR {}
 
     // Define a struct to hold the capabilities for each coin type.
     struct Caps<phantom CoinType> has key {
@@ -45,6 +46,14 @@ module razor::Coins {
         let (bnb_b, bnb_f, bnb_m) =
             coin::initialize<BNB>(admin,
                 utf8(b"Binance Coin"), utf8(b"BNB"), 8, true);
+        // Initialize RAZOR
+        let (razor_b, razor_f, razor_m) = coin::initialize<RAZOR>(
+            admin,
+            utf8(b"Razor Token"),
+            utf8(b"RAZOR"),
+            8,
+            true
+        );
 
         // Store the capabilities for each coin type under the admin account.
         move_to(admin, Caps<BTC> { mint: btc_m, freeze: btc_f, burn: btc_b });
@@ -53,6 +62,7 @@ module razor::Coins {
         move_to(admin, Caps<ETH> { mint: eth_m, freeze: eth_f, burn: eth_b });
         move_to(admin, Caps<SOL> { mint: sol_m, freeze: sol_f, burn: sol_b });
         move_to(admin, Caps<BNB> { mint: bnb_m, freeze: bnb_f, burn: bnb_b });
+        move_to(admin, Caps<RAZOR> { mint: razor_m, freeze: razor_f, burn: razor_b });
 
         // Register all coins for the admin account.
         register_coins_all(admin);
@@ -85,6 +95,21 @@ module razor::Coins {
         if (!coin::is_account_registered<BNB>(account_addr)) {
             coin::register<BNB>(account);
         };
+        // Register RAZOR if not already registered
+        if (!coin::is_account_registered<RAZOR>(account_addr)) {
+            coin::register<RAZOR>(account);
+        }
+    }
+
+    public entry fun mint_default(admin: &signer) acquires Caps {
+        let admin_addr = signer::address_of(admin);
+        mint_coin<BTC>(admin, admin_addr, 1900000000000000);
+        mint_coin<USDT>(admin, admin_addr, 10400000000000000000);
+        mint_coin<USDC>(admin, admin_addr, 3300000000000000000);
+        mint_coin<ETH>(admin, admin_addr, 12000000000000000);
+        mint_coin<BNB>(admin, admin_addr, 15000000000000000);
+        mint_coin<SOL>(admin, admin_addr, 44400000000000000);
+        mint_coin<RAZOR>(admin, admin_addr, 120000000000000000);
     }
 
     // Mint a new coin of a specific type and deposit it into a given account.
